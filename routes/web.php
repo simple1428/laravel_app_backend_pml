@@ -15,19 +15,38 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return view('welcome',['type_menu' => 'dashboard'] );
 });
+Route::middleware(['auth','verified'])->group(function () {
+    Route::get('/home', function () {
+        return view('pages.blank-page',['type_menu' => 'dashboard'] );
+    })->name('home');
+});
+// Route::get('/login', function () {
+//     return view('auth.login',['type_menu' => 'dashboard'] );
+// });
+// Route::get('/register', function () {
+//     return view('auth.register',['type_menu' => 'dashboard'] );
+// });
+// Route::get('/verify', function () {
+//     return view('auth.verify',['type_menu' => 'dashboard'] );
+// });
+// Route::get('/forgot', function () {
+//     return view('auth.forgot',['type_menu' => 'dashboard'] );
+// });
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
 
-Route::get('/dashboard', function () {
+/* Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard'); */
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -35,4 +54,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+// require __DIR__.'/auth.php';
